@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [Param]" guice-stage="DEVELOPMENT">
+  <parameter name="url" value="https://www.amazon.in/"/>
+  <test thread-count="5" name="Test(failed)">
+    <classes>
+      <class name="Or.kal.javv">
+        <methods>
+          <include name="sam"/>
+          <include name="mac"/>
+          <include name="ma"/>
+        </methods>
+      </class> <!-- Or.kal.javv -->
+    </classes>
+  </test> <!-- Test(failed) -->
+</suite> <!-- Failed suite [Param] -->
