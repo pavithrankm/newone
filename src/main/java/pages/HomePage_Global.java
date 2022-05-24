@@ -3,7 +3,8 @@ package Pages;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import org.apache.poi.hssf.record.PageBreakRecord.Break;
+import org.apache.poi.ss.formula.atp.Switch;
 import org.openqa.selenium.By;
 import org.openqa.selenium.By.ByXPath;
 import org.openqa.selenium.JavascriptExecutor;
@@ -403,30 +404,7 @@ public String ValidLoginPCS() throws InterruptedException
 	return driver.getTitle();
 
 }
-public String ValidLoginMultiBrandPCS() throws InterruptedException
 
-{
-
-	String PCS_Username = prop.getProperty("ValidLoginMultiPCS_email");
-	String PCS_Password = prop.getProperty("ValidLoginMultiPCS_Pswd");
-
-	Thread.sleep(5000);
-
-	act = new Actions(driver);
-
-	wait = new WebDriverWait(driver, 30);
-	wait.until(ExpectedConditions.visibilityOf(Account));
-	act.moveToElement(Account).build().perform();
-
-	LoginEmail.sendKeys(PCS_Username);
-	Password.sendKeys(PCS_Password);
-	Signin.click();
-	Thread.sleep(5000);
-	BrandSelectPopupPCS.click();
-	return driver.getTitle();
-	
-
-}
 
 public LoginPage UnApprovedLoginPCS() throws InterruptedException
 
@@ -735,30 +713,7 @@ public String ValidLoginCPS() throws InterruptedException
 	
 
 }
-public String ValidLoginMultiBrandCPS() throws InterruptedException
 
-{
-
-	String CPS_Username = prop.getProperty("ValidLoginMultiCPS_email");
-	String CPS_Password = prop.getProperty("ValidLoginMultiCPS_Pswd");
-
-	Thread.sleep(5000);
-
-	act = new Actions(driver);
-
-	wait = new WebDriverWait(driver, 30);
-	wait.until(ExpectedConditions.visibilityOf(Account));
-	act.moveToElement(Account).build().perform();
-
-	LoginEmail.sendKeys(CPS_Username);
-	Password.sendKeys(CPS_Password);
-	Signin.click();
-	Thread.sleep(8000);
-	BrandSelectPopupCPS.click();
-	return driver.getTitle();
-	
-
-}
 
 public String UnApprovedLoginCPS() throws InterruptedException
 
@@ -836,6 +791,58 @@ public String SignOut() {
 	return driver.getTitle();
 
 }
+public String ValidLoginMultiBrandPCS() throws InterruptedException
+
+{
+
+	String Username = prop.getProperty("ValidLoginMulti_email");
+	String UserPassword = prop.getProperty("ValidLoginMulti_Pswd");
+
+	Thread.sleep(5000);
+
+	act = new Actions(driver);
+
+	wait = new WebDriverWait(driver, 30);
+	wait.until(ExpectedConditions.visibilityOf(Account));
+	act.moveToElement(Account).build().perform();
+
+	LoginEmail.sendKeys(Username);
+	Password.sendKeys(UserPassword);
+	Signin.click();
+	Thread.sleep(8000);
+	
+ 
+		   BrandSelectPopupPCS.click();
+
+	
+	return driver.getTitle();
+
+}
+public String ValidLoginMultiBrandCPS() throws InterruptedException
+
+{
+
+	String CPS_Username = prop.getProperty("ValidLoginMulti_email");
+	String CPS_Password = prop.getProperty("ValidLoginMulti_email");
+
+	Thread.sleep(5000);
+
+	act = new Actions(driver);
+
+	wait = new WebDriverWait(driver, 30);
+	wait.until(ExpectedConditions.visibilityOf(Account));
+	act.moveToElement(Account).build().perform();
+
+	LoginEmail.sendKeys(CPS_Username);
+	Password.sendKeys(CPS_Password);
+	Signin.click();
+	Thread.sleep(8000);
+	BrandSelectPopupCPS.click();
+	return driver.getTitle();
+	
+
+}
+
 
 	
 

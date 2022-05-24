@@ -85,4 +85,54 @@ Assert.assertEquals(successmsg, Constants.Success_Msg_Reorder);
 		
 				
 	}
+	@Test(priority=3, description= "validating Recently viewed Items is in PDP")
+	public void Recently_viewedItems_validation() throws InterruptedException, IOException 
+	{
+		Thread.sleep(7000);
+		HomePage hp= new HomePage(driver);
+		
+		
+		hp.SearchByKeyword();
+		Thread.sleep(10000);
+		
+		
+	ProductListPage	plp = new ProductListPage(driver);
+	pdp=plp.GuestUser_ClickItem();
+	Thread.sleep(4000);
+	
+
+
+System.out.println(pdp.Recently_viwed_Title());
+
+String tile = pdp.Recently_viwed_Title();
+pdp.Recently_viwed_Item().click();
+
+Assert.assertEquals(tile,"Recently Viewed");
+	
+	
+		
+				
+	}
+	@Test(priority=4, description= "validating Recently viewed Items is in PDP")
+	public void Recently_viewed_Add_validation() throws InterruptedException, IOException 
+	{
+		Thread.sleep(4000);
+		pdp.Recently_viwed_add().click();
+		Thread.sleep(500);
+		String successmsg= pdp.Adding_Recentlview_Sucssmsg();
+		Assert.assertEquals(successmsg, Constants.Success_Msg_Reorder);
+	} 
+	
+	@Test(priority=5, description= "validating Related Products Items is in PDP")
+	public void RelatedProducts_validation() throws InterruptedException, IOException 
+	{
+		Thread.sleep(5000);
+	pdp.SearchByKeyword();
+		Thread.sleep(10000);
+		
+		pdp.RelatedProducts();
+	String	tile = pdp.RelatedProductsTitle();
+		System.out.println(tile);
+		
+	} 
 }

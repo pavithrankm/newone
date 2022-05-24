@@ -7,17 +7,29 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.io.FileHandler;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.aventstack.extentreports.ExtentTest;
+
 import io.github.bonigarcia.wdm.WebDriverManager;
+import net.bytebuddy.implementation.bytecode.ByteCodeAppender.Size;
 
 public class BasePage
 { 
@@ -37,20 +49,20 @@ public class BasePage
 	
 	//QPS
 	//	public static String configpath ="src/main/java/config_staging/configuration_staging_qps.properties";
-		public static String configpath ="src/main/java/config_staging2/configuration_staging2_qps.properties";
+	//	public static String configpath ="src/main/java/config_staging2/configuration_staging2_qps.properties";
 	//  public static String configpath ="src/main/java/config_prod/config_prod_qps.properties";
     
 	//glb
 	//	public static String configpath ="src/main/java/config_prod/config_prod_glb.properties";
 	//	public static String configpath ="src/main/java/config_staging/configuration_staging_glb.properties";
-	//	public static String configpath= "src/main/java/config_staging2/configuration_staging2_glb.properties";
+	 // public static String configpath= "src/main/java/config_staging2/configuration_staging2_glb.properties";
 	
 	//Aqua-gon
 	//public static String configpath="src/main/java/config_staging2/configuration_staging2_Aquagon.properties";
 	//public static String configpath="src/main/java/config_prod/config_prod_Aquagon.properties";
 		
 	//PEP	
-	//public static String configpath="src/main/java/config_staging2/configuration_staging2_PEP.properties";
+     //public static String configpath="src/main/java/config_staging2/configuration_staging2_PEP.properties";
 	//public static String configpath="src/main/java/config_prod/config_prod_PEP.properties";
 		
 	//FWP	
@@ -58,7 +70,10 @@ public class BasePage
 
 		
 	//APS 
+    
 	//public static String configpath = "src/main/java/config_prod/config_prod_Aps.properties";
+	public static String configpath="src/main/java/config_staging2/configuration_staging2_Aps.properties";
+	  
     
 	//TPS 
 	//public static String configpath ="src/main/java/config_prod/config_prod_Tps.properties";
@@ -95,7 +110,9 @@ public class BasePage
 			
 				System.setProperty("webdriver.chrome.driver",
 						System.getProperty("user.dir") + "\\Driver\\chromedriver.exe");
+				
 				driver = new ChromeDriver();
+				
 				
 
 //			WebDriverManager.chromedriver().setup();
@@ -113,8 +130,11 @@ public class BasePage
 		}
 		
 	//	driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-		driver.manage().deleteAllCookies();
-		driver.manage().window().maximize();
+		
+		((JavascriptExecutor)driver).executeScript("window.resizeTo(screen.width, screen.height)");
+		driver.manage().window().setPosition(new Point(0, 0));
+		driver.manage().window().setSize(new Dimension(2558,1378)); 
+		driver.findElement(By.tagName("body")).sendKeys(Keys.F11);
 		driver.get(prop.getProperty("url"));
 		tdriver.set(driver);
 		return getDriver();
@@ -138,9 +158,13 @@ public class BasePage
 	public String getScreenshot() throws IOException, InterruptedException
 	{
 		
+		
 		File src = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-		String path = System.getProperty("user.dir") + "/screenshots/" + System.currentTimeMillis() + ".png";
+		String path = System.getProperty("user.dir") + "/build/screenshots/" + System.currentTimeMillis() + ".png";
 		File destination = new File(path);
+		String absolutePath = destination.getAbsolutePath();
+		
+		
 
 		try {
 			FileUtils.copyFile(src, destination);
@@ -148,8 +172,9 @@ public class BasePage
 			System.out.println("screenshot captured failed...");
 		}
 
-		return path;
+		return absolutePath;
 	}
+	
 	public static String   Reportname() {
 		prop = new Properties();
 		return prop.getProperty("site");
@@ -162,11 +187,80 @@ public class BasePage
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 	
 		
-	        js.executeScript("arguments[0].focus();", element);
+	      //  js.executeScript("arguments[0].focus();", element);
 
 	        js.executeScript("arguments[0].scrollIntoView(true);", element);
 	       js.executeScript("arguments[0].click()", element);
 	    }
+
+	public static WebDriver getbrowser(String browsername) throws Exception {
+		try {
+			if (browsername.equalsIgnoreCase("chrome")) {
+				
+				System.setProperty("webdriver.chrome.driver",
+						System.getProperty("user.dir") + "\\Driver\\chromedriver.exe");
+				driver = new ChromeDriver();
+				driver.manage().window().maximize();
+				
+			} else if (browsername.equalsIgnoreCase("ie")) {
+				System.setProperty("webdriver.ie.driver",
+						System.getProperty("user.dir") + "\\Driver\\IEDriverServer.exe");
+				driver = new InternetExplorerDriver();
+				
+			}else if (browsername.equalsIgnoreCase("firefox")) {
+				System.setProperty("webdriver.gecko.driver",
+						System.getProperty("user.dir") + "\\Driver\\geckodriver.exe");
+				driver = new FirefoxDriver();
+				driver.manage().window().maximize();
+			}else {
+				throw new Exception("Not a valid Browser");
+			}
+			return driver;
+			
+		} catch (Exception e) {
+		e.printStackTrace();
+		throw new RuntimeException();
+		}
+	} 	
+	
+	public static WebDriver getUrl(String url) throws Exception {
+		try {
+			driver.get(url);
+		
+//			driver.manage().window().maximize();
+//			driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+			
+			return driver ;
+		} catch (Exception e) {
+		e.printStackTrace();
+		throw new RuntimeException();
+		}
+	}
+	
+	public static void moveToElement(WebElement element) {
+		try {
+			waitUntilElementVisibility(element);
+			Actions ac = new Actions(driver);
+			ac.moveToElement(element).build().perform();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+		
+	}
+	
+	public static void scrollUpandDownUsingElement(WebElement element) {
+		try {
+			waitUntilElementVisibility(element);
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("arguments[0].scrollIntoView();", element);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+	}
+	
+	
 	
 
 }

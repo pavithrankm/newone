@@ -3,12 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="SRSproject.SRSproject.Invoice">
+      <class name="SRSproject.SRSproject.LoginTest">
         <methods>
+          <include name="LoginFromPLP"/>
           <include name="setUp"/>
-          <include name="invoices"/>
+          <include name="LoginFromPDP"/>
         </methods>
-      </class> <!-- SRSproject.SRSproject.Invoice -->
+      </class> <!-- SRSproject.SRSproject.LoginTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
